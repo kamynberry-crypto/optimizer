@@ -1,0 +1,61 @@
+name: Build Grimace Optimizer (Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build Windows x64 EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore .\GrimaceOptimizer.csproj
+
+      - name: Publish self-contained EXE
+        run: >-
+          dotnet publish .\GrimaceOptimizer.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+
+      - name: Verify EXE
+        shell: pwsh
+        run: |
+          $exe = "bin\Release\net8.0-windows\win-x64\publish\GrimaceOptimizer.exe"
+          if (-not (Test-Path $exe)) {
+            throw "Expected EXE was not created: $exe"
+          }
+          Write-Host "Created: $exe"
+          Get-Item $exe | Select-Object FullName, Length
+
+      - name: Package artifact
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path "bin\Release\net8.0-windows\win-x64\publish\*" `
+            -DestinationPath "GrimaceOptimizer-Windows-x64.zip" `
+            -Force
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: GrimaceOptimizer-Windows-x64
+          path: GrimaceOptimizer-Windows-x64.zip
+          if-no-files-found: error
