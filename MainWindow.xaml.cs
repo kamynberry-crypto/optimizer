@@ -589,7 +589,7 @@ foreach ($class in $classes) {
 
         private void DisableOneDriveStartup()
         {
-            Run("powershell.exe", "-NoProfile -ExecutionPolicy Bypass -Command "Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'OneDrive' -ErrorAction SilentlyContinue"");
+            Run("powershell.exe", @"-NoProfile -ExecutionPolicy Bypass -Command ""Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'OneDrive' -ErrorAction SilentlyContinue""");
             Run("taskkill.exe", "/IM OneDrive.exe /F");
         }
 
