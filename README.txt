@@ -1,49 +1,43 @@
-GRIMACE OPTIMIZER V5 - UNIVERSAL GAME OPTIMIZER
+GRIMACE OPTIMIZER V6 — SAFE UNIVERSAL / HONE-INSPIRED
 
-This version keeps the Windows gaming optimizations from V4 and adds a truly game-agnostic game selector.
+Windows gaming optimizer with a universal game selector and a safety-first one-click OPTIMIZE ANY GAME workflow.
 
-NEW IN V5
-- Big dashboard button: OPTIMIZE ANY GAME
-- Game selector with common PC games
-- Browse any game's .exe for custom games
-- Optimize selected game with one click
-- Session-only High process priority for the selected game
-- Launch selected game when an executable path is known
-- Open the selected game's folder
-- Universal optimization no longer depends on Fortnite/Epic endpoints
-- Fortnite-specific tools are no longer required for the universal optimizer
+SAFETY-FIRST V6
+- One-click optimization now stops if a verified Windows restore point + registry snapshot cannot be created.
+- One-click mode uses a conservative Windows Balanced power plan, Game Mode, Game DVR capture reduction, temp cleanup and selected-game priority only.
+- HAGS, visual-effect changes, timer tuning, network tuning, MSI, telemetry, Xbox/OneDrive changes and other deeper modules are NOT applied automatically.
+- Advanced modules require explicit confirmation and another verified safety snapshot.
+- Registry backups are stored under %LOCALAPPDATA%\GrimaceOptimizer\Backups.
+- Restore-last-registry-backup is available in the Performance Center.
 
-GAME PROFILES INCLUDED
-- Fortnite
-- VALORANT
-- Counter-Strike 2
-- Apex Legends
-- Overwatch 2
-- Rocket League
-- Grand Theft Auto V
-- Roblox
-- Minecraft Java
-- Custom Game / any .exe
+FEATURES
+- Universal game selector and custom .exe support
+- Fortnite, VALORANT, Roblox, CS2, Apex Legends, Rocket League and other presets
+- Temporary low-latency timer request
+- Optional MSI optimization for supported Display/Network devices
+- Safe TCP/RSS network baseline and optional adapter offload tuning
+- Optional telemetry, OneDrive and Xbox background reductions
+- Boost-Up maintenance: temp cleanup + Windows Optimize Drives
+- Optional DISM + SFC repair
+- Existing hardware detection and endpoint latency testing
+- Anti-cheat-safe design: no DLL injection, game-memory editing, packet routing or anti-cheat modification
 
-WINDOWS OPTIMIZATIONS
-- High-performance power plan
-- Windows Game Mode
-- Background Game DVR capture disabled
-- Hardware-accelerated GPU scheduling request
-- Windows visual-effects performance setting
-- User temp cleanup
-- Selected game process priority
+WHAT V6 DELIBERATELY DOES NOT DO
+The default workflow does not disable Windows Defender, Windows Update, audio, SysMain, Windows Search, core networking, or other critical daily-use services. It also does not claim that registry/network tweaks guarantee FPS or ping improvements.
 
-IMPORTANT
-- Some Windows settings may require administrator rights or a restart.
-- HAGS depends on Windows, GPU and driver support.
-- Process priority is session-only.
-- The optimizer does not edit game configuration files.
-- The built-in game list contains process names for common games; use BROWSE .EXE when a game is installed differently or not listed.
-- Network tab remains an Epic endpoint test and is not used by the universal optimizer.
+IMPORTANT SAFETY NOTE
+Restore points and registry backups are rollback aids, not absolute guarantees. Some changes require a restart, driver behavior varies, and Windows may remove old restore points. If an advanced change causes problems, use the restore controls and/or Windows System Restore.
+
+HONE REFERENCE
+HONE-MASTER-PLAN.md documents the Hone-inspired feature mapping and safe deployment order. Grimace is an independent implementation and does not copy Hone proprietary code.
 
 BUILD
-GitHub Actions workflow: .github/workflows/build-windows.yml
+Build-GrimaceOptimizer.cmd
+or
+ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
-Manual publish command:
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+GITHUB ACTIONS
+.github/workflows/build-windows.yml builds the Windows x64 self-contained artifact.
+
+REQUIREMENTS
+Windows 10/11. The app requests administrator privileges because some optional Windows and registry modules require elevation.

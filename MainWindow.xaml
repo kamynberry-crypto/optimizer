@@ -1,7 +1,7 @@
 <Window x:Class="GrimaceOptimizer.MainWindow"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- Title="Grimace Optimizer V4" Height="820" Width="1280"
+ Title="Grimace Optimizer V6 — Safe Universal" Height="820" Width="1280"
  MinHeight="700" MinWidth="1050" WindowStartupLocation="CenterScreen"
  Background="#07111F" Foreground="#EAF4FF" Loaded="Window_Loaded">
  <Window.Resources>
@@ -84,6 +84,8 @@
       <Button Style="{StaticResource NavButton}" Tag="2" Click="Navigate_Click" ToolTip="Game Optimizer"><TextBlock Text="◈" FontSize="20" HorizontalAlignment="Center"/></Button>
       <Button Style="{StaticResource NavButton}" Tag="3" Click="Navigate_Click" ToolTip="Network"><TextBlock Text="⌁" FontSize="24" HorizontalAlignment="Center"/></Button>
       <Button Style="{StaticResource NavButton}" Tag="4" Click="Navigate_Click" ToolTip="Windows"><TextBlock Text="▦" FontSize="20" HorizontalAlignment="Center"/></Button>
+      <Button Style="{StaticResource NavButton}" Tag="5" Click="Navigate_Click" ToolTip="Hone-Inspired Modules"><TextBlock Text="◉" FontSize="20" HorizontalAlignment="Center"/></Button>
+      <Button Style="{StaticResource NavButton}" Tag="6" Click="Navigate_Click" ToolTip="Game Presets"><TextBlock Text="★" FontSize="20" HorizontalAlignment="Center"/></Button>
      </StackPanel>
      <Button Grid.Row="2" Style="{StaticResource NavButton}" ToolTip="About"><TextBlock Text="⚙" FontSize="20" HorizontalAlignment="Center"/></Button>
     </Grid>
@@ -270,6 +272,88 @@
          <Button Content="🧹 CLEAN USER TEMP FILES" Tag="temp" Height="54" Margin="6,0,0,8" Click="Tweak_Click"/>
         </UniformGrid>
         <TextBlock Text="Some settings may require administrator rights or a restart. HAGS support depends on Windows, GPU and driver support." Foreground="{StaticResource TextMuted}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+       </StackPanel>
+      </ScrollViewer>
+     </TabItem>
+
+     <!-- Hone-inspired safety, latency, debloat, network and maintenance modules -->
+     <TabItem>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+       <StackPanel Margin="2,0,2,16">
+        <TextBlock Text="Hone-Inspired Performance Center" Foreground="White" FontSize="25" FontWeight="Bold"/>
+        <TextBlock Text="Safety-first Windows gaming modules. One-click optimization uses conservative, reversible changes only; advanced changes require explicit confirmation and a verified backup." Foreground="{StaticResource TextMuted}" Margin="0,5,0,18" TextWrapping="Wrap"/>
+        <Border Background="{StaticResource Panel}" CornerRadius="14" Padding="18" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="01  SAFETY &amp; BACKUPS" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold"/>
+          <TextBlock Text="Create and verify a Windows restore point plus registry snapshot. If verification fails, one-click optimization stops without changing system settings." Foreground="White" FontSize="17" FontWeight="Bold" Margin="0,5,0,12"/>
+          <UniformGrid Columns="2">
+           <Button Content="🛡 CREATE SAFETY SNAPSHOT" Tag="snapshot" Height="52" Margin="0,0,6,0" Background="{StaticResource Blue}" Click="HoneModule_Click"/>
+           <Button Content="↩ RESTORE LAST REGISTRY BACKUP" Tag="restore" Height="52" Margin="6,0,0,0" Background="#12385F" Click="HoneModule_Click"/>
+          </UniformGrid>
+         </StackPanel>
+        </Border>
+        <Border Margin="0,12,0,0" Background="{StaticResource Panel}" CornerRadius="14" Padding="18" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="02  LATENCY &amp; INPUT" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold"/>
+          <TextBlock Text="Optional latency and device tuning. Every non-trivial change requires a verified backup and explicit confirmation." Foreground="White" FontSize="17" FontWeight="Bold" Margin="0,5,0,12"/>
+          <UniformGrid Columns="2">
+           <Button Content="⏱ LOW-LATENCY TIMER (TEMPORARY)" Tag="latency" Height="52" Margin="0,0,6,8" Click="HoneModule_Click"/>
+           <Button Content="⚙ OPTIMIZE MSI FOR DISPLAY / NETWORK" Tag="msi" Height="52" Margin="6,0,0,8" Click="HoneModule_Click"/>
+           <Button Content="📡 NETWORK I/O BASELINE" Tag="network" Height="52" Margin="0,0,6,0" Click="HoneModule_Click"/>
+           <Button Content="⚠ ADVANCED ADAPTER OFFLOAD" Tag="advancednetwork" Height="52" Margin="6,0,0,0" Click="HoneModule_Click"/>
+          </UniformGrid>
+          <TextBlock Text="MSI and adapter offload changes can behave differently by hardware/driver. Benchmark before and after; revert if stability or throughput worsens." Foreground="{StaticResource TextMuted}" FontSize="10" Margin="0,12,0,0" TextWrapping="Wrap"/>
+         </StackPanel>
+        </Border>
+        <Border Margin="0,12,0,0" Background="{StaticResource Panel}" CornerRadius="14" Padding="18" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="03  DEBLOAT &amp; BACKGROUND ACTIVITY" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold"/>
+          <TextBlock Text="Reduce optional background work without disabling Windows Security or core update infrastructure." Foreground="White" FontSize="17" FontWeight="Bold" Margin="0,5,0,12"/>
+          <UniformGrid Columns="3">
+           <Button Content="🔒 REDUCE TELEMETRY" Tag="telemetry" Height="52" Margin="0,0,6,0" Click="HoneModule_Click"/>
+           <Button Content="☁ STOP ONEDRIVE STARTUP" Tag="onedrive" Height="52" Margin="6,0" Click="HoneModule_Click"/>
+           <Button Content="🎮 PAUSE XBOX SERVICES" Tag="xbox" Height="52" Margin="6,0,0,0" Click="HoneModule_Click"/>
+          </UniformGrid>
+          <TextBlock Text="These are optional: OneDrive and Xbox/Game Pass features may depend on their services. SysMain, Windows Search and browser background processes are deliberately not disabled by the one-click profile because their impact varies by system." Foreground="{StaticResource TextMuted}" FontSize="10" Margin="0,12,0,0" TextWrapping="Wrap"/>
+         </StackPanel>
+        </Border>
+        <Border Margin="0,12,0,0" Background="{StaticResource Panel}" CornerRadius="14" Padding="18" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="04  BOOST-UP MAINTENANCE" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold"/>
+          <TextBlock Text="Optional maintenance tools. They are not presented as guaranteed FPS boosts and require a verified backup first." Foreground="White" FontSize="17" FontWeight="Bold" Margin="0,5,0,12"/>
+          <UniformGrid Columns="2">
+           <Button Content="🧹 CLEAN + OPTIMIZE C:" Tag="storage" Height="52" Margin="0,0,6,0" Click="HoneModule_Click"/>
+           <Button Content="🔧 RUN DISM + SFC REPAIR" Tag="repair" Height="52" Margin="6,0,0,0" Click="HoneModule_Click"/>
+          </UniformGrid>
+         </StackPanel>
+        </Border>
+        <Border Margin="0,12,0,0" Padding="16" CornerRadius="12" Background="#10243C" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <TextBlock Text="Anti-cheat safety: Grimace does not inject into games, modify game memory, alter anti-cheat files, or route network packets. Network tuning affects Windows/adapter settings only. Major anti-cheat systems are left intact." Foreground="{StaticResource TextMuted}" TextWrapping="Wrap"/>
+        </Border>
+       </StackPanel>
+      </ScrollViewer>
+     </TabItem>
+
+     <!-- Game-specific presets -->
+     <TabItem>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+       <StackPanel Margin="2,0,2,16">
+        <TextBlock Text="Game Presets" Foreground="White" FontSize="25" FontWeight="Bold"/>
+        <TextBlock Text="Fast presets for supported titles. They select the game profile and apply only safe Windows-side performance controls." Foreground="{StaticResource TextMuted}" Margin="0,5,0,18" TextWrapping="Wrap"/>
+        <UniformGrid Columns="2">
+         <Button Content="FORTNITE  •  COMPETITIVE" Tag="Fortnite" Height="58" Margin="0,0,6,8" Background="{StaticResource Blue}" Click="GamePreset_Click"/>
+         <Button Content="VALORANT  •  COMPETITIVE" Tag="VALORANT" Height="58" Margin="6,0,0,8" Background="#12385F" Click="GamePreset_Click"/>
+         <Button Content="ROBLOX  •  LOW LATENCY" Tag="Roblox" Height="58" Margin="0,0,6,8" Background="#12385F" Click="GamePreset_Click"/>
+         <Button Content="CS2  •  LOW LATENCY" Tag="Counter-Strike 2" Height="58" Margin="6,0,0,8" Background="#12385F" Click="GamePreset_Click"/>
+         <Button Content="APEX LEGENDS  •  COMPETITIVE" Tag="Apex Legends" Height="58" Margin="0,0,6,8" Background="#12385F" Click="GamePreset_Click"/>
+         <Button Content="ROCKET LEAGUE  •  PERFORMANCE" Tag="Rocket League" Height="58" Margin="6,0,0,8" Background="#12385F" Click="GamePreset_Click"/>
+        </UniformGrid>
+        <Border Margin="0,8,0,0" Background="{StaticResource Panel}" CornerRadius="14" Padding="18" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="HOW GAME PRESETS WORK" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold"/>
+          <TextBlock Text="The selector mirrors the useful part of Hone's game-library concept: choose a title, review the intended performance mode, and apply it with the game closed or before launch. Grimace does not edit protected game memory or anti-cheat components." Foreground="{StaticResource TextMuted}" Margin="0,6,0,0" TextWrapping="Wrap"/>
+         </StackPanel>
+        </Border>
        </StackPanel>
       </ScrollViewer>
      </TabItem>

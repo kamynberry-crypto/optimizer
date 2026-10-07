@@ -8,5 +8,6 @@
     <AssemblyName>GrimaceOptimizer</AssemblyName>
     <RootNamespace>GrimaceOptimizer</RootNamespace>
     <Platforms>AnyCPU</Platforms>
+      <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 </Project>
