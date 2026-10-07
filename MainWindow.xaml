@@ -1,0 +1,278 @@
+<Window x:Class="GrimaceOptimizer.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="Grimace Optimizer V4" Height="820" Width="1280"
+ MinHeight="700" MinWidth="1050" WindowStartupLocation="CenterScreen"
+ Background="#07111F" Foreground="#EAF4FF" Loaded="Window_Loaded">
+ <Window.Resources>
+  <SolidColorBrush x:Key="Bg" Color="#07111F"/>
+  <SolidColorBrush x:Key="Sidebar" Color="#081321"/>
+  <SolidColorBrush x:Key="Panel" Color="#0D1B2E"/>
+  <SolidColorBrush x:Key="Panel2" Color="#10243C"/>
+  <SolidColorBrush x:Key="Blue" Color="#1683FF"/>
+  <SolidColorBrush x:Key="Blue2" Color="#35A7FF"/>
+  <SolidColorBrush x:Key="BlueGlow" Color="#1C9BFF"/>
+  <SolidColorBrush x:Key="TextMuted" Color="#8EA6C0"/>
+  <SolidColorBrush x:Key="Border" Color="#1C3856"/>
+  <Style TargetType="Button">
+   <Setter Property="Cursor" Value="Hand"/>
+   <Setter Property="BorderThickness" Value="0"/>
+   <Setter Property="Padding" Value="14,10"/>
+   <Setter Property="Background" Value="#122A45"/>
+   <Setter Property="Foreground" Value="#EAF4FF"/>
+   <Setter Property="FontWeight" Value="SemiBold"/>
+   <Setter Property="Template">
+    <Setter.Value>
+     <ControlTemplate TargetType="Button">
+      <Border Background="{TemplateBinding Background}" CornerRadius="9" Padding="{TemplateBinding Padding}">
+       <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Border>
+      <ControlTemplate.Triggers>
+       <Trigger Property="IsMouseOver" Value="True">
+        <Setter Property="Opacity" Value="0.88"/>
+       </Trigger>
+       <Trigger Property="IsEnabled" Value="False">
+        <Setter Property="Opacity" Value="0.45"/>
+       </Trigger>
+      </ControlTemplate.Triggers>
+     </ControlTemplate>
+    </Setter.Value>
+   </Setter>
+  </Style>
+  <Style x:Key="NavButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="Background" Value="Transparent"/>
+   <Setter Property="Foreground" Value="#8EA6C0"/>
+   <Setter Property="HorizontalContentAlignment" Value="Left"/>
+   <Setter Property="Padding" Value="14,12"/>
+   <Setter Property="Margin" Value="8,3"/>
+  </Style>
+  <Style x:Key="CardButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="Background" Value="#10243C"/>
+   <Setter Property="BorderBrush" Value="#1C3856"/>
+  </Style>
+  <Style TargetType="TabControl">
+   <Setter Property="Background" Value="Transparent"/>
+   <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+  <Style TargetType="TabItem">
+   <Setter Property="Visibility" Value="Collapsed"/>
+  </Style>
+ </Window.Resources>
+
+ <Grid>
+  <!-- Main application -->
+  <Grid x:Name="MainContent" Opacity="0">
+   <Grid.ColumnDefinitions>
+    <ColumnDefinition Width="78"/>
+    <ColumnDefinition Width="*"/>
+   </Grid.ColumnDefinitions>
+
+   <!-- Sidebar -->
+   <Border Grid.Column="0" Background="{StaticResource Sidebar}" BorderBrush="#10243C" BorderThickness="0,0,1,0">
+    <Grid>
+     <Grid.RowDefinitions>
+      <RowDefinition Height="74"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="58"/>
+     </Grid.RowDefinitions>
+     <Border Margin="15,15,15,8" Width="46" Height="46" CornerRadius="13" Background="#102D4C">
+      <TextBlock Text="G" Foreground="{StaticResource Blue2}" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+     </Border>
+     <StackPanel Grid.Row="1" VerticalAlignment="Top">
+      <Button Style="{StaticResource NavButton}" Tag="0" Click="Navigate_Click" ToolTip="Dashboard"><TextBlock Text="⌂" FontSize="22" HorizontalAlignment="Center"/></Button>
+      <Button Style="{StaticResource NavButton}" Tag="1" Click="Navigate_Click" ToolTip="Optimizations"><TextBlock Text="⚡" FontSize="20" HorizontalAlignment="Center"/></Button>
+      <Button Style="{StaticResource NavButton}" Tag="2" Click="Navigate_Click" ToolTip="Fortnite"><TextBlock Text="◈" FontSize="20" HorizontalAlignment="Center"/></Button>
+      <Button Style="{StaticResource NavButton}" Tag="3" Click="Navigate_Click" ToolTip="Network"><TextBlock Text="⌁" FontSize="24" HorizontalAlignment="Center"/></Button>
+      <Button Style="{StaticResource NavButton}" Tag="4" Click="Navigate_Click" ToolTip="Windows"><TextBlock Text="▦" FontSize="20" HorizontalAlignment="Center"/></Button>
+     </StackPanel>
+     <Button Grid.Row="2" Style="{StaticResource NavButton}" ToolTip="About"><TextBlock Text="⚙" FontSize="20" HorizontalAlignment="Center"/></Button>
+    </Grid>
+   </Border>
+
+   <!-- Dashboard/content -->
+   <Grid Grid.Column="1" Margin="28,22,28,20">
+    <Grid.RowDefinitions>
+     <RowDefinition Height="Auto"/>
+     <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Grid>
+     <StackPanel>
+      <TextBlock Text="GRIMACE OPTIMIZER" Foreground="White" FontSize="25" FontWeight="Bold"/>
+      <TextBlock Text="OPTIMIZE YOUR PC FOR GAMING" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold" Margin="0,2,0,0"/>
+     </StackPanel>
+     <Border HorizontalAlignment="Right" Padding="13,8" CornerRadius="10" Background="#0E2238" BorderBrush="{StaticResource Border}" BorderThickness="1">
+      <StackPanel Orientation="Horizontal">
+       <Ellipse Width="8" Height="8" Fill="#35E58A" Margin="0,0,8,0"/>
+       <TextBlock x:Name="StatusText" Text="READY" Foreground="#8FF2BA" FontWeight="Bold"/>
+      </StackPanel>
+     </Border>
+    </Grid>
+
+    <TabControl x:Name="MainTabs" Grid.Row="1" Margin="0,18,0,0">
+     <!-- Dashboard -->
+     <TabItem>
+      <Grid>
+       <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+       </Grid.RowDefinitions>
+       <Grid Margin="0,0,0,16">
+        <Grid.ColumnDefinitions>
+         <ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="1.55*"/>
+        </Grid.ColumnDefinitions>
+        <Border Background="{StaticResource Panel}" CornerRadius="12" Padding="16" Margin="0,0,8,0" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel><TextBlock Text="OPTIMIZATIONS" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="Bold"/><TextBlock Text="7" Foreground="White" FontSize="27" FontWeight="Bold" Margin="0,5,0,0"/><TextBlock Text="available" Foreground="{StaticResource Blue2}" FontSize="11"/></StackPanel>
+        </Border>
+        <Border Grid.Column="1" Background="{StaticResource Panel}" CornerRadius="12" Padding="16" Margin="8,0" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel><TextBlock Text="PROFILES" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="Bold"/><TextBlock Text="3" Foreground="White" FontSize="27" FontWeight="Bold" Margin="0,5,0,0"/><TextBlock Text="ready to use" Foreground="{StaticResource Blue2}" FontSize="11"/></StackPanel>
+        </Border>
+        <Border Grid.Column="2" Background="{StaticResource Panel}" CornerRadius="12" Padding="16" Margin="8,0" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel><TextBlock Text="ONE-CLICK" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="Bold"/><TextBlock Text="1" Foreground="White" FontSize="27" FontWeight="Bold" Margin="0,5,0,0"/><TextBlock Text="full optimize" Foreground="{StaticResource Blue2}" FontSize="11"/></StackPanel>
+        </Border>
+        <Border Grid.Column="3" Background="#0D1B2E" CornerRadius="12" Padding="18" Margin="8,0,0,0" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <Grid>
+          <StackPanel>
+           <TextBlock Text="SYSTEM STATUS" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="Bold"/>
+           <TextBlock x:Name="DashboardProfile" Text="Ready for optimization" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,5,0,0"/>
+           <TextBlock Text="Your hardware profile is detected below." Foreground="{StaticResource TextMuted}" FontSize="11" Margin="0,3,0,0"/>
+          </StackPanel>
+          <Ellipse Width="52" Height="52" HorizontalAlignment="Right" VerticalAlignment="Center" Stroke="{StaticResource Blue}" StrokeThickness="4" Opacity="0.9"/>
+         </Grid>
+        </Border>
+       </Grid>
+
+       <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="1.42*"/><ColumnDefinition Width="0.95*"/></Grid.ColumnDefinitions>
+        <Border Background="{StaticResource Panel}" CornerRadius="14" Padding="22" Margin="0,0,9,0" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <Grid>
+          <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+          <TextBlock Text="YOUR PC" Foreground="White" FontSize="20" FontWeight="Bold"/>
+          <TextBlock Grid.Row="1" x:Name="RecommendationText" Text="Analyzing your PC..." Foreground="{StaticResource TextMuted}" Margin="0,6,0,18" TextWrapping="Wrap"/>
+          <Grid Grid.Row="2">
+           <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+           <Grid Margin="0,0,0,12"><TextBlock Text="CPU" Foreground="{StaticResource TextMuted}"/><TextBlock x:Name="CpuText" Text="Detecting..." Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis"/></Grid>
+           <Grid Grid.Row="1" Margin="0,0,0,12"><TextBlock Text="GPU" Foreground="{StaticResource TextMuted}"/><TextBlock x:Name="GpuText" Text="Detecting..." Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis"/></Grid>
+           <Grid Grid.Row="2" Margin="0,0,0,12"><TextBlock Text="MEMORY" Foreground="{StaticResource TextMuted}"/><TextBlock x:Name="RamText" Text="Detecting..." Foreground="White" FontWeight="Bold" HorizontalAlignment="Right"/></Grid>
+           <Grid Grid.Row="3"><TextBlock Text="SYSTEM DRIVE" Foreground="{StaticResource TextMuted}"/><TextBlock x:Name="StorageText" Text="Detecting..." Foreground="White" FontWeight="Bold" HorizontalAlignment="Right"/></Grid>
+          </Grid>
+         </Grid>
+        </Border>
+
+        <Border Grid.Column="1" Background="#0C1B2C" CornerRadius="14" Padding="22" Margin="9,0,0,0" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="RECOMMENDED" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold"/>
+          <TextBlock Text="Optimize everything" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,5,0,3"/>
+          <TextBlock Text="Apply the best available gaming settings in one click, then test your network region." Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+          <Button x:Name="OptimizeEverythingButton" Content="⚡ OPTIMIZE MY PC" Height="62" Background="{StaticResource Blue}" FontSize="16" FontWeight="Bold" Click="OptimizeEverything_Click"/>
+          <TextBlock Text="Recommended: Competitive FPS + safe performance settings" Foreground="{StaticResource TextMuted}" FontSize="10" TextWrapping="Wrap" Margin="0,12,0,0"/>
+         </StackPanel>
+        </Border>
+       </Grid>
+      </Grid>
+     </TabItem>
+
+     <!-- Optimizations -->
+     <TabItem>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+       <StackPanel Margin="2,0,2,10">
+        <TextBlock Text="Your Optimizations" Foreground="White" FontSize="25" FontWeight="Bold"/>
+        <TextBlock Text="Choose a profile or apply individual Windows gaming controls." Foreground="{StaticResource TextMuted}" Margin="0,5,0,18"/>
+        <Grid Margin="0,0,0,14">
+         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+         <Button Content="⚡ ULTIMATE PERFORMANCE" Tag="ultimate" Height="58" Margin="0,0,6,0" Background="{StaticResource Blue}" FontSize="13" Click="Preset_Click"/>
+         <Button Grid.Column="1" Content="🎯 COMPETITIVE FPS" Tag="competitive" Height="58" Margin="6,0" Background="#12385F" FontSize="13" Click="Preset_Click"/>
+         <Button Grid.Column="2" Content="🛡 BALANCED &amp; SAFE" Tag="balanced" Height="58" Margin="6,0,0,0" Background="#12385F" FontSize="13" Click="Preset_Click"/>
+        </Grid>
+        <Border Background="{StaticResource Panel}" CornerRadius="12" Padding="18" BorderBrush="{StaticResource Border}" BorderThickness="1">
+         <StackPanel>
+          <TextBlock Text="CURRENT PROFILE" Foreground="{StaticResource Blue2}" FontSize="10" FontWeight="Bold"/>
+          <TextBlock x:Name="ProfileText" Text="Competitive FPS" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,4,0,5"/>
+          <TextBlock x:Name="SmartLog" Text="Choose a profile to apply the recommended gaming settings." Foreground="{StaticResource TextMuted}" TextWrapping="Wrap"/>
+         </StackPanel>
+        </Border>
+        <TextBlock Text="INDIVIDUAL OPTIMIZATIONS" Foreground="White" FontSize="16" FontWeight="Bold" Margin="0,20,0,10"/>
+        <UniformGrid Columns="2">
+         <Button Content="⚡ HIGH PERFORMANCE POWER PLAN" Tag="power" Height="52" Margin="0,0,6,8" Click="Tweak_Click"/>
+         <Button Content="🎮 ENABLE WINDOWS GAME MODE" Tag="gamemode" Height="52" Margin="6,0,0,8" Click="Tweak_Click"/>
+         <Button Content="🚫 DISABLE GAME DVR / CAPTURE" Tag="dvr" Height="52" Margin="0,0,6,8" Click="Tweak_Click"/>
+         <Button Content="🖥 REQUEST HAGS" Tag="hags" Height="52" Margin="6,0,0,8" Click="Tweak_Click"/>
+         <Button Content="🪟 REDUCE VISUAL EFFECTS" Tag="visuals" Height="52" Margin="0,0,6,8" Click="Tweak_Click"/>
+         <Button Content="🧹 CLEAN USER TEMP FILES" Tag="temp" Height="52" Margin="6,0,0,8" Click="Tweak_Click"/>
+        </UniformGrid>
+        <TextBlock x:Name="WindowsLog" Text="No individual changes made yet." Foreground="{StaticResource TextMuted}" Margin="0,8,0,0" TextWrapping="Wrap"/>
+       </StackPanel>
+      </ScrollViewer>
+     </TabItem>
+
+     <!-- Fortnite -->
+     <TabItem>
+      <StackPanel Margin="2,0">
+       <TextBlock Text="Fortnite" Foreground="White" FontSize="25" FontWeight="Bold"/>
+       <TextBlock Text="Launch and tune the game without changing your local configuration files." Foreground="{StaticResource TextMuted}" Margin="0,5,0,18"/>
+       <Button Content="🎮 LAUNCH FORTNITE" Height="58" Background="{StaticResource Blue}" FontSize="15" Click="LaunchButton_Click"/>
+       <UniformGrid Columns="2" Margin="0,14,0,0">
+        <Button Content="🚀 SET FORTNITE HIGH PROCESS PRIORITY" Tag="priority" Height="54" Margin="0,0,6,0" Click="Tweak_Click"/>
+        <Button Content="📁 OPEN FORTNITE CONFIG FOLDER" Tag="config" Height="54" Margin="6,0,0,0" Click="Tweak_Click"/>
+       </UniformGrid>
+       <Border Margin="0,16,0,0" Padding="16" CornerRadius="12" Background="{StaticResource Panel}" BorderBrush="{StaticResource Border}" BorderThickness="1">
+        <TextBlock Text="Priority is session-only. The config shortcut only opens the normal WindowsClient folder; it does not edit your Fortnite files." Foreground="{StaticResource TextMuted}" TextWrapping="Wrap"/>
+       </Border>
+      </StackPanel>
+     </TabItem>
+
+     <!-- Network -->
+     <TabItem>
+      <StackPanel Margin="2,0">
+       <TextBlock Text="Network" Foreground="White" FontSize="25" FontWeight="Bold"/>
+       <TextBlock Text="Find the lowest responding Epic endpoint latency." Foreground="{StaticResource TextMuted}" Margin="0,5,0,18"/>
+       <Button x:Name="RegionButton" Content="📶 TEST ALL REGIONS" Height="56" Background="#12385F" FontWeight="Bold" Click="RegionButton_Click"/>
+       <Border Margin="0,16,0,0" Padding="22" CornerRadius="14" Background="{StaticResource Panel}" BorderBrush="{StaticResource Border}" BorderThickness="1">
+        <StackPanel>
+         <TextBlock Text="BEST REGION" Foreground="{StaticResource Blue2}" FontSize="10" FontWeight="Bold"/>
+         <TextBlock x:Name="RegionText" Text="Best region: —" Foreground="White" FontSize="23" FontWeight="Bold" Margin="0,4,0,0"/>
+         <TextBlock x:Name="PingText" Text="Lowest ping: —" Foreground="{StaticResource Blue2}" FontSize="18" Margin="0,5,0,0"/>
+         <TextBlock x:Name="NetworkLog" Text="" Foreground="{StaticResource TextMuted}" Margin="0,14,0,0" TextWrapping="Wrap"/>
+        </StackPanel>
+       </Border>
+      </StackPanel>
+     </TabItem>
+
+     <!-- Windows -->
+     <TabItem>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+       <StackPanel Margin="2,0">
+        <TextBlock Text="Windows" Foreground="White" FontSize="25" FontWeight="Bold"/>
+        <TextBlock Text="Individual system controls used by the optimizer." Foreground="{StaticResource TextMuted}" Margin="0,5,0,18"/>
+        <UniformGrid Columns="2">
+         <Button Content="⚡ HIGH PERFORMANCE POWER PLAN" Tag="power" Height="54" Margin="0,0,6,8" Click="Tweak_Click"/>
+         <Button Content="🎮 ENABLE WINDOWS GAME MODE" Tag="gamemode" Height="54" Margin="6,0,0,8" Click="Tweak_Click"/>
+         <Button Content="🚫 DISABLE GAME DVR / BACKGROUND CAPTURE" Tag="dvr" Height="54" Margin="0,0,6,8" Click="Tweak_Click"/>
+         <Button Content="🖥 REQUEST HARDWARE GPU SCHEDULING" Tag="hags" Height="54" Margin="6,0,0,8" Click="Tweak_Click"/>
+         <Button Content="🪟 REDUCE WINDOWS VISUAL EFFECTS" Tag="visuals" Height="54" Margin="0,0,6,8" Click="Tweak_Click"/>
+         <Button Content="🧹 CLEAN USER TEMP FILES" Tag="temp" Height="54" Margin="6,0,0,8" Click="Tweak_Click"/>
+        </UniformGrid>
+        <TextBlock Text="Some settings may require administrator rights or a restart. HAGS support depends on Windows, GPU and driver support." Foreground="{StaticResource TextMuted}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+       </StackPanel>
+      </ScrollViewer>
+     </TabItem>
+    </TabControl>
+   </Grid>
+  </Grid>
+
+  <!-- Startup animation / splash -->
+  <Grid x:Name="StartupOverlay" Background="#050B14" Panel.ZIndex="50">
+   <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="430">
+    <Border Width="92" Height="92" CornerRadius="24" Background="#0E2B49" HorizontalAlignment="Center" Margin="0,0,0,20">
+     <TextBlock Text="G" Foreground="{StaticResource Blue2}" FontSize="52" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Border>
+    <TextBlock Text="GRIMACE OPTIMIZER" Foreground="White" FontSize="27" FontWeight="Bold" HorizontalAlignment="Center"/>
+    <TextBlock Text="OPTIMIZE YOUR PC FOR GAMING" Foreground="{StaticResource Blue2}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4,0,24"/>
+    <Border Height="5" CornerRadius="3" Background="#10243C">
+     <Border x:Name="StartupProgress" HorizontalAlignment="Left" Width="12" CornerRadius="3" Background="{StaticResource Blue2}"/>
+    </Border>
+    <TextBlock x:Name="StartupText" Text="Initializing performance center..." Foreground="{StaticResource TextMuted}" FontSize="11" HorizontalAlignment="Center" Margin="0,12,0,0"/>
+   </StackPanel>
+  </Grid>
+ </Grid>
+</Window>
