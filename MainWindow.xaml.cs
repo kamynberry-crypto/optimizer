@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Win32;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +15,38 @@ namespace GrimaceOptimizer
 {
     public partial class MainWindow : Window
     {
+        private sealed class GameProfile
+        {
+            public string Name { get; }
+            public string ProcessName { get; }
+            public string? ExecutablePath { get; set; }
+
+            public GameProfile(string name, string processName, string? executablePath = null)
+            {
+                Name = name;
+                ProcessName = processName;
+                ExecutablePath = executablePath;
+            }
+
+            public override string ToString() => Name;
+        }
+
+        private readonly List<GameProfile> gameProfiles = new()
+        {
+            new GameProfile("Fortnite", "FortniteClient-Win64-Shipping"),
+            new GameProfile("VALORANT", "VALORANT-Win64-Shipping"),
+            new GameProfile("Counter-Strike 2", "cs2"),
+            new GameProfile("Apex Legends", "r5apex"),
+            new GameProfile("Overwatch 2", "Overwatch"),
+            new GameProfile("Rocket League", "RocketLeague"),
+            new GameProfile("Grand Theft Auto V", "GTA5"),
+            new GameProfile("Roblox", "RobloxPlayerBeta"),
+            new GameProfile("Minecraft Java", "javaw"),
+            new GameProfile("Custom Game", "")
+        };
+
+        private GameProfile SelectedGame => GameSelector.SelectedItem as GameProfile ?? gameProfiles[0];
+
         private readonly (string Name, string Host)[] regions =
         {
             ("NA-East", "ping-nae.ds.on.epicgames.com"),
@@ -48,6 +82,8 @@ namespace GrimaceOptimizer
         public MainWindow()
         {
             InitializeComponent();
+            GameSelector.ItemsSource = gameProfiles;
+            GameSelector.SelectedIndex = 0;
             DetectHardware();
         }
 
@@ -94,62 +130,192 @@ namespace GrimaceOptimizer
 
         private async void OptimizeEverything_Click(object sender, RoutedEventArgs e)
         {
+            await OptimizeSelectedGameAsync();
+        }
+
+        private async void OptimizeSelectedGame_Click(object sender, RoutedEventArgs e)
+        {
+            await OptimizeSelectedGameAsync();
+        }
+
+        private async Task OptimizeSelectedGameAsync()
+        {
             OptimizeEverythingButton.IsEnabled = false;
             StatusText.Text = "OPTIMIZING";
-            DashboardProfile.Text = "Applying gaming optimizations...";
-            SmartLog.Text = "Running the full recommended optimization set...";
+            DashboardProfile.Text = "Optimizing " + SelectedGame.Name + "...";
+            SmartLog.Text = "Applying the universal gaming profile to " + SelectedGame.Name + "...";
+            GameLog.Text = "Running Windows gaming optimizations...";
 
             try
             {
-                // Full one-click action uses the existing Ultimate profile, preserving
-                // all existing optimizer functionality in a single button.
                 ApplyCoreGamingSettings();
                 ApplyHags();
                 ApplyVisuals();
                 CleanTemp();
-                SetFortnitePriority();
+                SetSelectedGamePriority();
 
-                ProfileText.Text = "Ultimate Performance";
-                DashboardProfile.Text = "Optimization complete";
-                SmartLog.Text = "Everything available in the full profile was applied.\n\n" +
+                ProfileText.Text = "Universal Gaming";
+                SmartLog.Text = "Universal gaming profile applied to " + SelectedGame.Name + ".\n\n" +
                     "✓ High-performance power plan\n" +
                     "✓ Windows Game Mode\n" +
                     "✓ Background Game DVR capture disabled\n" +
                     "✓ HAGS requested\n" +
                     "✓ Windows visual effects reduced\n" +
                     "✓ User temp files cleaned\n" +
-                    "✓ Fortnite priority raised when running\n\n" +
-                    "Testing network regions now...";
-
-                StatusText.Text = "TESTING NETWORK";
-                var results = await Task.Run(TestRegions);
-                if (results.Count > 0)
-                {
-                    var best = results[0];
-                    RegionText.Text = "Best region: " + best.Name;
-                    PingText.Text = "Lowest ping: " + best.Ping + " ms";
-                    NetworkLog.Text = "Tested " + results.Count + " responding region endpoint(s).";
-                }
-                else
-                {
-                    RegionText.Text = "Best region: unavailable";
-                    PingText.Text = "Lowest ping: —";
-                    NetworkLog.Text = "No listed endpoint responded.";
-                }
+                    "✓ " + SelectedGame.Name + " process priority raised when running\n\n" +
+                    "This profile is game-agnostic and does not change game configuration files.";
+                GameLog.Text = "✓ Universal optimization applied to " + SelectedGame.Name + ".";
 
                 StatusText.Text = "OPTIMIZED";
-                DashboardProfile.Text = "PC optimized";
+                DashboardProfile.Text = SelectedGame.Name + " optimized";
+                DashboardSelectedGame.Text = "Selected game: " + SelectedGame.Name;
             }
             catch (Exception ex)
             {
                 StatusText.Text = "READY";
                 DashboardProfile.Text = "Optimization finished with an issue";
                 SmartLog.Text = "Optimization completed with an issue: " + ex.Message;
+                GameLog.Text = "Could not complete the selected game optimization: " + ex.Message;
             }
             finally
             {
                 OptimizeEverythingButton.IsEnabled = true;
             }
+        }
+
+        private void GameSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (GameSelector == null || GameSelector.SelectedItem is not GameProfile game) return;
+            UpdateSelectedGameDisplay(game);
+        }
+
+        private void UpdateSelectedGameDisplay(GameProfile game)
+        {
+            SelectedGameText.Text = "Selected: " + game.Name;
+            SelectedProcessText.Text = string.IsNullOrWhiteSpace(game.ProcessName)
+                ? "Process: choose a .exe with BROWSE .EXE"
+                : "Process: " + game.ProcessName + ".exe";
+            DashboardProfile.Text = game.Name + " ready to optimize";
+            DashboardSelectedGame.Text = "Selected game: " + game.Name;
+        }
+
+        private void BrowseGame_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Select a game executable",
+                Filter = "Game executable (*.exe)|*.exe|All files (*.*)|*.*",
+                CheckFileExists = true
+            };
+
+            if (dialog.ShowDialog() != true) return;
+
+            string processName = Path.GetFileNameWithoutExtension(dialog.FileName);
+            var custom = new GameProfile(Path.GetFileNameWithoutExtension(dialog.FileName), processName, dialog.FileName);
+            int existing = gameProfiles.FindIndex(g => string.Equals(g.ExecutablePath, dialog.FileName, StringComparison.OrdinalIgnoreCase));
+            if (existing < 0)
+            {
+                gameProfiles.Add(custom);
+                GameSelector.ItemsSource = null;
+                GameSelector.ItemsSource = gameProfiles;
+                existing = gameProfiles.Count - 1;
+            }
+
+            GameSelector.SelectedIndex = existing;
+            GameLog.Text = "Selected executable: " + dialog.FileName;
+        }
+
+        private void LaunchSelectedGame_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var game = SelectedGame;
+                if (!string.IsNullOrWhiteSpace(game.ExecutablePath) && File.Exists(game.ExecutablePath))
+                {
+                    Process.Start(new ProcessStartInfo { FileName = game.ExecutablePath, UseShellExecute = true });
+                    StatusText.Text = "LAUNCHING";
+                    GameLog.Text = "Launching " + game.Name + "...";
+                    return;
+                }
+
+                Process[] running = string.IsNullOrWhiteSpace(game.ProcessName)
+                    ? Array.Empty<Process>()
+                    : Process.GetProcessesByName(game.ProcessName);
+
+                if (running.Length > 0)
+                {
+                    GameLog.Text = game.Name + " is already running.";
+                    StatusText.Text = "RUNNING";
+                    return;
+                }
+
+                MessageBox.Show("Use BROWSE .EXE to select " + game.Name + " if it is not already running. The built-in profile does not guess an install location.", "Grimace Optimizer");
+            }
+            catch (Exception ex)
+            {
+                GameLog.Text = "Could not launch the selected game: " + ex.Message;
+            }
+        }
+
+        private void OpenGameFolder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string? path = SelectedGame.ExecutablePath;
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    Process[] processes = string.IsNullOrWhiteSpace(SelectedGame.ProcessName)
+                        ? Array.Empty<Process>()
+                        : Process.GetProcessesByName(SelectedGame.ProcessName);
+                    path = processes.Select(GetProcessPath).FirstOrDefault(p => !string.IsNullOrWhiteSpace(p));
+                }
+
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    GameLog.Text = "Game folder is unknown. Use BROWSE .EXE first, or start the game and try again.";
+                    return;
+                }
+
+                string? folder = Path.GetDirectoryName(path);
+                if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
+                    Process.Start(new ProcessStartInfo { FileName = folder, UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                GameLog.Text = "Could not open the game folder: " + ex.Message;
+            }
+        }
+
+        private static string? GetProcessPath(Process process)
+        {
+            try { return process.MainModule?.FileName; } catch { return null; }
+        }
+
+        private void SetSelectedGamePriority()
+        {
+            var game = SelectedGame;
+            if (string.IsNullOrWhiteSpace(game.ProcessName))
+            {
+                GameLog.Text = "No process selected. Use BROWSE .EXE to choose the game executable.";
+                return;
+            }
+
+            Process[] processes = Process.GetProcessesByName(game.ProcessName);
+            if (processes.Length == 0)
+            {
+                GameLog.Text = "✓ Windows gaming settings applied. " + game.Name + " is not running, so process priority will apply when you run the game and use Optimize Selected Game again.";
+                return;
+            }
+
+            int changed = 0;
+            foreach (var process in processes)
+            {
+                try { process.PriorityClass = ProcessPriorityClass.High; changed++; } catch { }
+            }
+
+            GameLog.Text = changed > 0
+                ? "✓ " + game.Name + " process priority set to High for the current session."
+                : "✓ Windows gaming settings applied, but Windows did not allow the process priority change.";
         }
 
         private void DetectHardware()
@@ -273,7 +439,7 @@ namespace GrimaceOptimizer
                         WindowsLog.Text = "✓ User temp files cleaned where Windows allowed.";
                         break;
                     case "priority":
-                        SetFortnitePriority();
+                        SetSelectedGamePriority();
                         break;
                     case "config":
                         OpenFortniteConfig();

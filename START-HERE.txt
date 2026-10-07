@@ -1,28 +1,25 @@
-GRIMACE OPTIMIZER V4 - GITHUB BUILD
+GRIMACE OPTIMIZER V5 - GITHUB READY
 
-You do NOT need .NET or Visual Studio on your laptop.
-GitHub will compile the Windows EXE for you.
+1. Upload this project to GitHub, preserving:
+   .github/workflows/build-windows.yml
 
-1. Go to https://github.com and sign in.
-2. Click + (top right) -> New repository.
-3. Name it GrimaceOptimizer and create it.
-4. In the new repository, click Add file -> Upload files.
-5. Upload EVERYTHING in this folder, including the .github folder.
-6. Commit the files.
-7. Open the Actions tab.
-8. Select "Build Grimace Optimizer (Windows)".
-9. Click "Run workflow" -> "Run workflow".
-10. Wait for the green check.
-11. Open the completed run.
-12. Scroll to Artifacts.
-13. Download "GrimaceOptimizer-Windows-x64".
-14. Extract it and run GrimaceOptimizer.exe.
+2. Open GitHub -> Actions.
 
-If Actions is disabled or you cannot see the workflow:
-- Make sure .github/workflows/build-windows.yml was uploaded.
-- Refresh the repository page.
-- Open Settings -> Actions -> General and allow actions if the repository asks.
+3. Select:
+   Build Grimace Optimizer (Windows)
 
-The workflow builds on a Windows GitHub runner, installs .NET 8, publishes a
-self-contained win-x64 single-file EXE, verifies it exists, and uploads it as
-an artifact. Your laptop does not need the .NET SDK.
+4. Click Run workflow -> Run workflow.
+
+5. Wait for the green checkmark.
+
+6. Open the successful run and download:
+   GrimaceOptimizer-Windows-x64
+
+V5 adds:
+- OPTIMIZE ANY GAME dashboard button
+- Game selector
+- Common game profiles
+- Browse any .exe
+- Selected game process priority
+- Selected game launch/folder tools
+- Universal optimizer that does not depend on Fortnite/Epic network endpoints

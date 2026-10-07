@@ -1,40 +1,49 @@
-GRIMACE OPTIMIZER V4 - BLUE GAMING CENTER
+GRIMACE OPTIMIZER V5 - UNIVERSAL GAME OPTIMIZER
 
-UI updates:
-- Hone-inspired dark blue dashboard layout with left navigation
-- Animated startup splash/loading sequence
-- Large one-click "OPTIMIZE MY PC" button
-- Existing optimization profiles and individual controls preserved
-- Dashboard hardware summary and optimization status
-- Network region testing remains available
+This version keeps the Windows gaming optimizations from V4 and adds a truly game-agnostic game selector.
 
-One-click optimization applies the existing full performance set and then tests Epic endpoint latency.
+NEW IN V5
+- Big dashboard button: OPTIMIZE ANY GAME
+- Game selector with common PC games
+- Browse any game's .exe for custom games
+- Optimize selected game with one click
+- Session-only High process priority for the selected game
+- Launch selected game when an executable path is known
+- Open the selected game's folder
+- Universal optimization no longer depends on Fortnite/Epic endpoints
+- Fortnite-specific tools are no longer required for the universal optimizer
 
-Build:
+GAME PROFILES INCLUDED
+- Fortnite
+- VALORANT
+- Counter-Strike 2
+- Apex Legends
+- Overwatch 2
+- Rocket League
+- Grand Theft Auto V
+- Roblox
+- Minecraft Java
+- Custom Game / any .exe
+
+WINDOWS OPTIMIZATIONS
+- High-performance power plan
+- Windows Game Mode
+- Background Game DVR capture disabled
+- Hardware-accelerated GPU scheduling request
+- Windows visual-effects performance setting
+- User temp cleanup
+- Selected game process priority
+
+IMPORTANT
+- Some Windows settings may require administrator rights or a restart.
+- HAGS depends on Windows, GPU and driver support.
+- Process priority is session-only.
+- The optimizer does not edit game configuration files.
+- The built-in game list contains process names for common games; use BROWSE .EXE when a game is installed differently or not listed.
+- Network tab remains an Epic endpoint test and is not used by the universal optimizer.
+
+BUILD
+GitHub Actions workflow: .github/workflows/build-windows.yml
+
+Manual publish command:
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-
-Important:
-Some Windows changes require administrator rights or a restart. HAGS support depends on Windows/GPU/driver. The region test measures endpoint latency; it cannot guarantee Epic matchmaking uses a specific physical server.
-
-GITHUB ACTIONS WINDOWS BUILD
-============================
-
-This project includes a GitHub Actions workflow at:
-.github/workflows/build-windows.yml
-
-To build without installing .NET on your PC:
-
-1. Create a GitHub repository.
-2. Upload all project files, including the .github folder.
-3. Open the repository's Actions tab.
-4. Select "Build Grimace Optimizer (Windows)".
-5. Click "Run workflow".
-6. When it finishes, open the completed workflow run.
-7. Under Artifacts, download "GrimaceOptimizer-Windows-x64".
-8. Extract the ZIP and run GrimaceOptimizer.exe.
-
-The workflow also runs automatically when changes are pushed to main or master.
-It uses a Windows GitHub runner, installs the .NET 8 SDK, publishes a self-contained
-win-x64 single-file EXE, verifies that the EXE exists, and uploads a ZIP artifact.
-
-No .NET SDK is required on the computer that downloads and runs the published EXE.
