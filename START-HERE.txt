@@ -1,10 +1,9 @@
-GRIMACETWEAKS — START HERE
+PULSEFORGE
+==========
 
-1. Upload this entire folder to a GitHub repository.
-2. Make sure .github/workflows/build-windows.yml exists in the repository.
-3. Open GitHub Actions.
-4. Run "Build Windows x64 EXE".
-5. Download the Windows x64 artifact.
-6. Extract it and run GrimaceTweaks.exe.
+1. Upload these files to a GitHub repository.
+2. Open Actions.
+3. Run "Build PulseForge Windows x64".
+4. Download the PulseForge-Windows-x64 artifact.
 
-This is a C# WPF application. No Python runtime is required.
+Fortnite is the primary profile. My Games lets you select any .exe and use the same safe engine.
