@@ -1,12 +1,12 @@
-# Grimace Optimizer — Hone-Inspired Master Plan
+# GrimaceTweaks — Hone-Inspired Master Plan
 
-This document describes the Hone-inspired capabilities added to Grimace Optimizer V5. It is an independent implementation and does not copy Hone's proprietary code.
+This document describes the Hone-inspired capabilities added to GrimaceTweaks V5. It is an independent implementation and does not copy Hone's proprietary code.
 
 ## 1. Pre-Optimization & Safety — V6 Safe Mode
 
 Grimace V6 makes safety the gate for optimization. One-click mode refuses to proceed unless it can verify a Windows System Restore point command succeeded and all tracked registry exports were created. The registry areas are exported to:
 
-`%LOCALAPPDATA%\\GrimaceOptimizer\\Backups\\<timestamp>`
+`%LOCALAPPDATA%\\GrimaceTweaks\\Backups\\<timestamp>`
 
 The UI also provides a restore-last-registry-backup action. Every advanced module asks for explicit confirmation and creates another verified snapshot before making its change. A restore point is a safety net, not a guarantee: Windows can remove old restore points and some changes require a restart. Hone's own support documentation similarly recommends creating a restore point before advanced optimizations.
 

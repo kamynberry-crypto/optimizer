@@ -1,25 +1,10 @@
-GRIMACE OPTIMIZER V5 - GITHUB READY
+GRIMACETWEAKS — START HERE
 
-1. Upload this project to GitHub, preserving:
-   .github/workflows/build-windows.yml
+1. Upload this entire folder to a GitHub repository.
+2. Make sure .github/workflows/build-windows.yml exists in the repository.
+3. Open GitHub Actions.
+4. Run "Build Windows x64 EXE".
+5. Download the Windows x64 artifact.
+6. Extract it and run GrimaceTweaks.exe.
 
-2. Open GitHub -> Actions.
-
-3. Select:
-   Build Grimace Optimizer (Windows)
-
-4. Click Run workflow -> Run workflow.
-
-5. Wait for the green checkmark.
-
-6. Open the successful run and download:
-   GrimaceOptimizer-Windows-x64
-
-V5 adds:
-- OPTIMIZE ANY GAME dashboard button
-- Game selector
-- Common game profiles
-- Browse any .exe
-- Selected game process priority
-- Selected game launch/folder tools
-- Universal optimizer that does not depend on Fortnite/Epic network endpoints
+This is a C# WPF application. No Python runtime is required.

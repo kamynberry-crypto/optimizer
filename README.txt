@@ -1,43 +1,25 @@
-GRIMACE OPTIMIZER V6 — SAFE UNIVERSAL / HONE-INSPIRED
+GrimaceTweaks v1.0.0
+====================
 
-Windows gaming optimizer with a universal game selector and a safety-first one-click OPTIMIZE ANY GAME workflow.
+A Windows WPF gaming optimizer inspired by the layout and workflow of modern PC tweak utilities.
 
-SAFETY-FIRST V6
-- One-click optimization now stops if a verified Windows restore point + registry snapshot cannot be created.
-- One-click mode uses a conservative Windows Balanced power plan, Game Mode, Game DVR capture reduction, temp cleanup and selected-game priority only.
-- HAGS, visual-effect changes, timer tuning, network tuning, MSI, telemetry, Xbox/OneDrive changes and other deeper modules are NOT applied automatically.
-- Advanced modules require explicit confirmation and another verified safety snapshot.
-- Registry backups are stored under %LOCALAPPDATA%\GrimaceOptimizer\Backups.
-- Restore-last-registry-backup is available in the Performance Center.
+IMPORTANT: This project is written in C#/.NET WPF. It does not use Python.
 
-FEATURES
+Highlights
+- EMTweaks-style dark/neon-purple desktop interface
+- Safe one-click optimization with a required verified safety snapshot
 - Universal game selector and custom .exe support
-- Fortnite, VALORANT, Roblox, CS2, Apex Legends, Rocket League and other presets
-- Temporary low-latency timer request
-- Optional MSI optimization for supported Display/Network devices
-- Safe TCP/RSS network baseline and optional adapter offload tuning
-- Optional telemetry, OneDrive and Xbox background reductions
-- Boost-Up maintenance: temp cleanup + Windows Optimize Drives
-- Optional DISM + SFC repair
-- Existing hardware detection and endpoint latency testing
-- Anti-cheat-safe design: no DLL injection, game-memory editing, packet routing or anti-cheat modification
+- Game profiles for Fortnite, VALORANT, CS2, Apex Legends, Rocket League and Roblox
+- Hardware detection
+- Game launch/folder helpers
+- Region latency testing
+- Optional advanced Windows/network modules with confirmation gates
+- Restore-last-backup support
+- No DLL injection, game-memory editing, anti-cheat modification, or Defender disabling
 
-WHAT V6 DELIBERATELY DOES NOT DO
-The default workflow does not disable Windows Defender, Windows Update, audio, SysMain, Windows Search, core networking, or other critical daily-use services. It also does not claim that registry/network tweaks guarantee FPS or ping improvements.
+Safety philosophy
+The default Optimize My PC path is intentionally conservative. Advanced changes such as HAGS, high-performance power, network adapter changes, service changes, and timer-resolution changes are not silently applied.
 
-IMPORTANT SAFETY NOTE
-Restore points and registry backups are rollback aids, not absolute guarantees. Some changes require a restart, driver behavior varies, and Windows may remove old restore points. If an advanced change causes problems, use the restore controls and/or Windows System Restore.
-
-HONE REFERENCE
-HONE-MASTER-PLAN.md documents the Hone-inspired feature mapping and safe deployment order. Grimace is an independent implementation and does not copy Hone proprietary code.
-
-BUILD
-Build-GrimaceOptimizer.cmd
-or
- dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-
-GITHUB ACTIONS
-.github/workflows/build-windows.yml builds the Windows x64 self-contained artifact.
-
-REQUIREMENTS
-Windows 10/11. The app requests administrator privileges because some optional Windows and registry modules require elevation.
+Build
+Use GitHub Actions: Actions -> Build Windows x64 EXE -> Run workflow.
+The workflow publishes a self-contained Windows x64 EXE named GrimaceTweaks.exe.

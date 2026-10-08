@@ -12,7 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace GrimaceOptimizer
+namespace GrimaceTweaks
 {
     public partial class MainWindow : Window
     {
@@ -272,7 +272,7 @@ namespace GrimaceOptimizer
                     return;
                 }
 
-                MessageBox.Show("Use BROWSE .EXE to select " + game.Name + " if it is not already running. The built-in profile does not guess an install location.", "Grimace Optimizer");
+                MessageBox.Show("Use BROWSE .EXE to select " + game.Name + " if it is not already running. The built-in profile does not guess an install location.", "GrimaceTweaks");
             }
             catch (Exception ex)
             {
@@ -463,14 +463,14 @@ namespace GrimaceOptimizer
         {
             try
             {
-                string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GrimaceOptimizer", "Backups");
+                string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GrimaceTweaks", "Backups");
                 Directory.CreateDirectory(folder);
                 string stamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
                 string backup = Path.Combine(folder, stamp);
                 Directory.CreateDirectory(backup);
 
                 // Require the Windows restore point command to succeed. We do not silently continue.
-                int restoreExit = RunAndGetExitCode("powershell.exe", "-NoProfile -ExecutionPolicy Bypass -Command \"Checkpoint-Computer -Description 'Grimace Optimizer Before Optimization' -RestorePointType 'MODIFY_SETTINGS'\"");
+                int restoreExit = RunAndGetExitCode("powershell.exe", "-NoProfile -ExecutionPolicy Bypass -Command \"Checkpoint-Computer -Description 'GrimaceTweaks Before Optimization' -RestorePointType 'MODIFY_SETTINGS'\"");
 
                 ExportRegistry(@"HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR", Path.Combine(backup, "GameDVR.reg"));
                 ExportRegistry(@"HKCU\System\GameConfigStore", Path.Combine(backup, "GameConfigStore.reg"));
@@ -491,7 +491,7 @@ namespace GrimaceOptimizer
                 }
 
                 File.WriteAllText(Path.Combine(backup, "BACKUP-VERIFIED.txt"),
-                    "Grimace Optimizer safety snapshot verified at " + DateTime.Now.ToString("O") + Environment.NewLine +
+                    "GrimaceTweaks safety snapshot verified at " + DateTime.Now.ToString("O") + Environment.NewLine +
                     "Restore point command exit code: 0" + Environment.NewLine +
                     "Registry exports: GameDVR, GameConfigStore, GameBar, VisualEffects, GraphicsDrivers" + Environment.NewLine +
                     "Note: restore points are a rollback aid, not an absolute guarantee.");
@@ -615,10 +615,10 @@ foreach ($class in $classes) {
 
         private void RestoreLastBackup()
         {
-            string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GrimaceOptimizer", "Backups");
-            if (!Directory.Exists(root)) { WindowsLog.Text = "No Grimace Optimizer registry backup was found."; return; }
+            string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GrimaceTweaks", "Backups");
+            if (!Directory.Exists(root)) { WindowsLog.Text = "No GrimaceTweaks registry backup was found."; return; }
             string? latest = Directory.GetDirectories(root).OrderByDescending(Directory.GetLastWriteTimeUtc).FirstOrDefault();
-            if (latest == null) { WindowsLog.Text = "No Grimace Optimizer registry backup was found."; return; }
+            if (latest == null) { WindowsLog.Text = "No GrimaceTweaks registry backup was found."; return; }
             foreach (string file in Directory.GetFiles(latest, "*.reg")) Run("reg.exe", "import \"" + file + "\"");
             WindowsLog.Text = "✓ Last registry safety backup imported. Restart Windows if a restored setting needs it.";
         }
@@ -705,7 +705,12 @@ foreach ($class in $classes) {
             if (match != null)
             {
                 GameSelector.SelectedItem = match;
-                ApplyCoreGamingSettings();
+                if (!EnsureSafetyForChange())
+                {
+                    GameLog.Text = "Preset stopped because a verified safety snapshot could not be created.";
+                    return;
+                }
+                ApplySafeCoreGamingSettings();
                 SetSelectedGamePriority();
                 GameLog.Text = "✓ " + match.Name + " performance preset selected. Grimace only changes supported Windows/game settings; it does not inject code or modify anti-cheat files.";
                 MainTabs.SelectedIndex = 2;
@@ -832,7 +837,7 @@ foreach ($class in $classes) {
             }
             catch
             {
-                MessageBox.Show("Epic Games Launcher could not be opened. Make sure Epic Games Launcher and Fortnite are installed.", "Grimace Optimizer");
+                MessageBox.Show("Epic Games Launcher could not be opened. Make sure Epic Games Launcher and Fortnite are installed.", "GrimaceTweaks");
             }
         }
 
